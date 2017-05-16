@@ -279,6 +279,8 @@ class ConteoGeo:
 
         self.listapuntos = self.baseD.listaCoordenadas ( )
 
+        CONSTANTS.LISTAPUNTOS = self.listapuntos
+
         self.listapuntos = ref.CoordenadasGeo ( self.dir ).conversion_Pixel_Coordenadas ( self.listapuntos )
         cshp.CrearShapefile ( "Total_" + nombreShp, direccionShp ).crearmultipuntos ( self.listapuntos )
         total = len ( self.listapuntos )
@@ -546,6 +548,8 @@ class ConteoGeo:
         return x, y
 
     def escalar_imagen(self, x, y, direccionReducida):
+        CONSTANTS.TIFF_DIR = self.dir
+        print "IMAGEN JPGE LOCATION ==================================== : " + direccionReducida
         x, y = self.calculoDimencionImagenInterfaz ( x, y )
         os.system (
             "gdal_translate -of GTiff " + self.dir + " " + direccionReducida + " -outsize " + str ( x ) + " " + str (

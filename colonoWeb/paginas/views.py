@@ -5,6 +5,8 @@ import cv2
 import paginas.manejo.configuracion as conf
 import paginas.manejo.formatoImagen as formatosI
 import paginas.manejo.reporte as rep
+import paginas.manejo.vistaImagenResultados as vistIR
+import paginas.manejo.CONSTANTS as CONSTANTS
 
 from django.shortcuts import render, HttpResponse
 from reportlab.lib.pagesizes import A4
@@ -59,14 +61,18 @@ def prosesamiento(request):
 
     datos=conf.cargar()
     datos.datosString()
+
     print int(datos.ruido),float(datos.proximidad),"archivoshp",datos.nombreArchivo, datos.multiArchivo
+
     resultado=conteo.contadorAgrupado(int(datos.ruido),float(datos.proximidad),"paginas\\manejo\\archivoshp",
                                       str(datos.nombreArchivo), datos.multiArchivo)
 
     reporte=rep.Reporte( datos.escala, datos.ruido, datos.proximidad, datos.capacidad, resultado[1], resultado[0],
                          resultado[2], datos.multiArchivo,datos.nombreArchivo)
 
-    resultado={'res': resultado[1],'tie':resultado[2],'cic':resultado[0]}
+    vistIR.crearImgenResultados()
+
+    resultado={'res': resultado[1],'tie':resultado[2],'cic':resultado[0], 'imgDraw':CONSTANTS.JPG_FULL_DIR}
 
     #datos.imp()
     rep.guardarReporte(reporte)

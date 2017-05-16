@@ -35,5 +35,6 @@ Parámetros:
 
 def formato(imagen, nombre):
     imagen = cv2.resize ( imagen, (1, 1), interpolation=cv2.INTER_CUBIC )
+
     cv2.imwrite ( "paginas\\static\\paginaP\\img\\" + nombre, imagen )
     # ***************************************************************************************************
