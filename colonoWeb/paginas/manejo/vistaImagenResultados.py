@@ -5,18 +5,30 @@ import os
 import sys
 from PIL import Image
 from PIL import ImageDraw
+import cv2
 
 
 def crearImgenResultados():
     if (convertImage()):
-        jpgfile = Image.open(CONSTANTS.JPG_FULL_DIR)
+        print "==========================> ", len(CONSTANTS.LISTAPUNTOS)
+        print "==========================> ", CONSTANTS.LISTAPUNTOS
+
+        listaPuntosNu = []
+        print CONSTANTS.GEOREFERENCIA.geoT
         for elemento in CONSTANTS.LISTAPUNTOS:
             x,y = GeocoordToPixelCoord(elemento[0],elemento[1])
-            draw = ImageDraw.Draw(jpgfile)
-            draw.ellipse((x, y, 10, 10), fill=128)
-            del draw
+            listaPuntosNu.append([x,y])
+        print "==========================> ", listaPuntosNu
+
+        jpgfile = Image.open(CONSTANTS.JPG_FULL_DIR)
+        draw = ImageDraw.Draw(jpgfile)
+        for elemento in listaPuntosNu:
+            draw.ellipse((drawPos(elemento[0],elemento[1],8)), fill='red', outline='blue')
+
+
 
         jpgfile.save(CONSTANTS.JPG_FULL_DIR)
+        del draw
         del jpgfile
         return True
 
@@ -32,9 +44,12 @@ def convertImage():
 
 
 def GeocoordToPixelCoord( px, py):
-    s = px - self.geoT[0]
-    t = py - self.geoT[3]
-    det = self.geoT[1] * self.geoT[5] - self.geoT[2] * self.geoT[4]
-    x = (s * self.geoT[5] - self.geoT[2] * t) / det
-    y = (t * self.geoT[1] - self.geoT[4] * s) / det
+    s = px - CONSTANTS.GEOREFERENCIA.geoT[0]
+    t = py - CONSTANTS.GEOREFERENCIA.geoT[3]
+    det = CONSTANTS.GEOREFERENCIA.geoT[1] * CONSTANTS.GEOREFERENCIA.geoT[5] - CONSTANTS.GEOREFERENCIA.geoT[2] * CONSTANTS.GEOREFERENCIA.geoT[4]
+    x = (s * CONSTANTS.GEOREFERENCIA.geoT[5] - CONSTANTS.GEOREFERENCIA.geoT[2] * t) / det
+    y = (t * CONSTANTS.GEOREFERENCIA.geoT[1] - CONSTANTS.GEOREFERENCIA.geoT[4] * s) / det
     return int ( x ), int ( y )
+
+def drawPos (x,y,diametro):
+    return x-diametro,y-diametro,x+diametro,y+diametro

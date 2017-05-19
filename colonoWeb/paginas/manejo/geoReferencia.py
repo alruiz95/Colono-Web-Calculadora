@@ -1,5 +1,6 @@
 import gdal
 import osr
+import CONSTANTS
 
 """
 Clase con la que se obtiene las coordenadas geograficas de los
@@ -16,6 +17,8 @@ class CoordenadasGeo:
         self.latlong = self.proj.CloneGeogCS ( )
         self.transform = osr.CoordinateTransformation ( self.proj, self.latlong )
         self.geoT = self.g.GetGeoTransform ( )
+        CONSTANTS.GEOREFERENCIA = self
+
 
     """
     Metodo el cual recibe la posicion de un
@@ -40,6 +43,7 @@ class CoordenadasGeo:
         det = self.geoT[1] * self.geoT[5] - self.geoT[2] * self.geoT[4]
         x = (s * self.geoT[5] - self.geoT[2] * t) / det
         y = (t * self.geoT[1] - self.geoT[4] * s) / det
+
         return int ( x ), int ( y )
 
     """
