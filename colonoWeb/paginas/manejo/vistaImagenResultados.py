@@ -20,7 +20,10 @@ def crearImgenResultados():
             listaPuntosNu.append([x,y])
         print "==========================> ", listaPuntosNu
 
+        tamImage = os.stat(CONSTANTS.JPG_FULL_DIR).st_size
+        Image.MAX_IMAGE_PIXELS = tamImage + 100
         jpgfile = Image.open(CONSTANTS.JPG_FULL_DIR)
+
         draw = ImageDraw.Draw(jpgfile)
         for elemento in listaPuntosNu:
             draw.ellipse((drawPos(elemento[0],elemento[1],8)), fill='red', outline='blue')

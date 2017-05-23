@@ -8,7 +8,7 @@ V1
 p3
 sS'tiempo'
 p4
-S'0.28'
+S'0.30'
 p5
 sS'ruido'
 p6
