@@ -2,19 +2,24 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from datetime import datetime
 from reportlab.lib.utils import ImageReader
-from django.shortcuts import render, HttpResponse
+from PIL import Image
+import PIL
+from django.http import HttpResponse
 import paginas.manejo.reporte as rep
 from io import BytesIO
+import os
+import CONSTANTS
+from reportlab.lib.units import cm
 
 def saveFilePDF():
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reporte.pdf"'
+
     fecha = datetime.now()
     fechaStr = str(fecha.day) + "/" + str(fecha.month) + "/" + str(fecha.year)
 
     reporte = rep.cargarReporte()
-    response = HttpResponse(content_type='aplication/pdf')
-    response['Content-Disposition'] = 'attachment; filename=reporte.pdf'
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
+    c = canvas.Canvas(response, pagesize=A4)
 
     c.setLineWidth(.3)
     c.setFont('Helvetica', 22)
@@ -40,9 +45,10 @@ def saveFilePDF():
 
     tamImage = os.stat(CONSTANTS.JPG_FULL_DIR).st_size
     Image.MAX_IMAGE_PIXELS = tamImage + 100
-    jpgfile = ImageReader(CONSTANTS.JPG_FULL_DIR)
-    c.drawImage(jpgfile, 30, 10, mask='auto')
 
+    jpgfile = ImageReader(CONSTANTS.JPG_FULL_DIR)
+    c.drawImage(jpgfile, 30, 20,  width=19*cm, preserveAspectRatio=True)
+
+    c.showPage()
     c.save()
-    pdf = buffer.getvalue()
-    return response.write(pdf)
+    return response

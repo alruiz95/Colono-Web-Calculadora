@@ -8,7 +8,7 @@ V1
 p3
 sS'tiempo'
 p4
-S'0.30'
+S'115.91'
 p5
 sS'ruido'
 p6
@@ -16,7 +16,7 @@ V8
 p7
 sS'conteo'
 p8
-I121
+I24408
 sS'escala'
 p9
 V0.3

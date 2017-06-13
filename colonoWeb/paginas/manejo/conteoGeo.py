@@ -188,6 +188,7 @@ class ConteoGeo:
                 if indice2[1] > maxC:
                     maxC = indice2[1]
             centroides.append ( [((maxC - minC) / 2) + minC, ((maxF - minF) / 2) + minF, len ( indice1 )] )
+        del listapuntos
         return centroides
 
     # ******************************************************************************************************************
@@ -227,8 +228,8 @@ class ConteoGeo:
 
     def sub2 (self,args):
 
-        process = psutil.Process(self.SUBcontadorAgrupado(args))
-        print process.memory_info().rss
+        process = psutil.Process(self.SUBcontadorAgrupado(args[0]))
+        print str(args[1]) + " - "+ str(process.memory_info().rss)
         del process
 
 
@@ -410,6 +411,8 @@ class ConteoGeo:
             if xI >= self.xTamanno and yI >= self.yTamanno:
                 self.fin = False
             xI = 0
+
+        del rojo,verde,azul, infrarrojo, bandera
         return listapuntos
 
     # ******************************************************************************************************************
@@ -489,12 +492,14 @@ class ConteoGeo:
         lista = []
 
         x , y  = 0 , 0
+        cont = 0;
         while x < self.xTamanno - 1 and y < self.yTamanno - 1:
             elemento = []
             elemento.append([x, y])
             x ,y = self.coordenadasLimitadas(x,y,limitePixeles)
             elemento.append([x, y])
-            lista.append(elemento)
+            lista.append([elemento,cont])
+            cont+=1
         print len(lista)
 
         #nucleos = multiprocessing.cpu_count()

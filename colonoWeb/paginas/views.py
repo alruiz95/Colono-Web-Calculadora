@@ -116,8 +116,7 @@ def ajusteParametros(request):
 """Funcion que crea un PDF con los resultados y parametros con que se analizo la imagen """
 def crearPDF(request):
 
-    response = savePDF.saveFilePDF()
-    return response
+    return savePDF.saveFilePDF()
 
 def animacio(request):
     return render(request,'paginas/animacion.html')
